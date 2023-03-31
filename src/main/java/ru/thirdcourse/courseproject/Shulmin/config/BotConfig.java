@@ -1,10 +1,13 @@
 package ru.thirdcourse.courseproject.Shulmin.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
+import ru.thirdcourse.courseproject.Shulmin.telegram.MyMathTelegramBot;
 
-@Component
+@Configuration
 @PropertySource("classpath:application.properties")
 public class BotConfig {
     @Value("${telegram.bot-name}")
@@ -12,7 +15,7 @@ public class BotConfig {
     @Value("${telegram.bot-token}")
     private String botToken;
     @Value("${telegram.webhook-path}")
-    private String webHook;
+    private String webHookPath;
 
     public String getBotName() {
         return botName;
@@ -23,6 +26,13 @@ public class BotConfig {
     }
 
     public String getWebHook() {
-        return webHook;
+        return webHookPath;
+    }
+
+    @Bean
+    public MyMathTelegramBot MyMathTelegramBot() {
+        SetWebhook setWebhook = SetWebhook.builder().url(webHookPath).build();
+
+        return new MyMathTelegramBot(setWebhook, botToken, botName);
     }
 }
