@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import ru.thirdcourse.courseproject.Shulmin.telegram.MyMathTelegramBot;
+import ru.thirdcourse.courseproject.Shulmin.telegram.handlers.MessageHandler;
 
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -30,9 +31,9 @@ public class BotConfig {
     }
 
     @Bean
-    public MyMathTelegramBot MyMathTelegramBot() {
+    public MyMathTelegramBot myMathTelegramBot(MessageHandler messageHandler) {
         SetWebhook setWebhook = SetWebhook.builder().url(webHookPath).build();
 
-        return new MyMathTelegramBot(setWebhook, botToken, botName);
+        return new MyMathTelegramBot(setWebhook, botToken, botName, messageHandler);
     }
 }

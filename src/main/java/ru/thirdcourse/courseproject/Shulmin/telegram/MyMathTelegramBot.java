@@ -6,28 +6,29 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
+import ru.thirdcourse.courseproject.Shulmin.telegram.handlers.MessageHandler;
 
 public class MyMathTelegramBot extends SpringWebhookBot {
     private String botPath;
     private String botUsername;
     private String botToken;
 
-    public MyMathTelegramBot(SetWebhook setWebhook, String botToken, String botName) {
+    private final MessageHandler messageHandler;
+
+    public MyMathTelegramBot(SetWebhook setWebhook, String botToken, String botName, MessageHandler messageHandler) {
         super(setWebhook, botToken);
         botUsername = botName;
+        this.messageHandler = messageHandler;
     }
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        if (update.getMessage() != null && update.getMessage().hasText()) {
-            long chatId = update.getMessage().getChatId();
+        return handleUpdate(update);
+    }
 
-            try {
-                execute(SendMessage.builder().chatId(chatId).text("Success").build());
-            } catch (TelegramApiException ex)
-            {
-                ex.printStackTrace();
-            }
+    private BotApiMethod<?> handleUpdate(Update update) {
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            return messageHandler.answerMessage(update.getMessage());
         }
         return null;
     }
