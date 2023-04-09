@@ -39,14 +39,15 @@ public class KeyboardMaker {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
         for (String buttonName : CallbackDataEnum.getGrades()) {
-            keyboard.add(getLineWithOneButton(buttonName));
+            keyboard.add(getLineWithOneButton(buttonName, buttonName));
         }
 
         return InlineKeyboardMarkup.builder().keyboard(keyboard).build();
     }
 
     public InlineKeyboardMarkup getTasksNumberKeyboard() {
-        final String callbackDataPrefix = CallbackDataEnum.TASKS_NUMBER_PREFIX.getButtonCallbackQuery() + ";";
+        final String prefix = CallbackDataEnum.TASKS_NUMBER_PREFIX.getButtonCallbackQuery() + ";";
+
         String[] tasksNumberVariants = new String[] {
                 "1", "2", "3", "4", "5",
                 "6", "7", "8", "9", "10",
@@ -66,7 +67,7 @@ public class KeyboardMaker {
             String tasksNumberVariant = tasksNumberVariants[i];
             InlineKeyboardButton inlineKeyboardButton = InlineKeyboardButton.builder()
                     .text(tasksNumberVariant)
-                    .callbackData(callbackDataPrefix + tasksNumberVariant)
+                    .callbackData(prefix + tasksNumberVariant)
                     .build();
             keyboard.get(row).add(inlineKeyboardButton);
         }
@@ -75,7 +76,7 @@ public class KeyboardMaker {
     }
 
     public InlineKeyboardMarkup getVariantsNumberKeyboard() {
-        final String callbackDataPrefix = CallbackDataEnum.VARIANTS_NUMBER_PREFIX.getButtonCallbackQuery() + ";";
+        final String prefix = CallbackDataEnum.VARIANTS_NUMBER_PREFIX.getButtonCallbackQuery() + ";";
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(new ArrayList<>());
@@ -84,7 +85,7 @@ public class KeyboardMaker {
             String variantsNumber = Integer.toString(i);
             InlineKeyboardButton inlineKeyboardButton = InlineKeyboardButton.builder()
                     .text(variantsNumber)
-                    .callbackData(callbackDataPrefix + variantsNumber)
+                    .callbackData(prefix + variantsNumber)
                     .build();
             keyboard.get(0).add(inlineKeyboardButton);
         }
@@ -92,23 +93,27 @@ public class KeyboardMaker {
     }
 
     public ReplyKeyboard getTasksFormatKeyboard() {
+        final String prefix = CallbackDataEnum.FORMAT_PREFIX.getButtonCallbackQuery() + ";";
+
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(getLineWithOneButton("pdf", CallbackDataEnum.PDF.getButtonCallbackQuery()));
-        keyboard.add(getLineWithOneButton("в тексте ответного сообщения",
-                CallbackDataEnum.TEXT_MESSAGE.getButtonCallbackQuery()));
+        keyboard.add(getLineWithOneButton(CallbackDataEnum.PDF.getButtonCallbackQuery(),
+                prefix + CallbackDataEnum.PDF.getButtonCallbackQuery()));
+        keyboard.add(getLineWithOneButton(CallbackDataEnum.TEXT_MESSAGE.getButtonCallbackQuery(),
+                prefix + CallbackDataEnum.TEXT_MESSAGE.getButtonCallbackQuery()));
 
         return InlineKeyboardMarkup.builder().keyboard(keyboard).build();
     }
 
-    private List<InlineKeyboardButton> getLineWithOneButton(String buttonName) {
-        InlineKeyboardButton button = InlineKeyboardButton.builder()
-                .text(buttonName)
-                .callbackData(buttonName)
-                .build();
+    public ReplyKeyboard getFirstGradeTopicsKeyboard() {
+        final String prefix = CallbackDataEnum.FIRST_GRADE.getButtonCallbackQuery() + ";";
 
-        List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
-        keyboardButtonsRow.add(button);
-        return keyboardButtonsRow;
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+
+        for (String topic : CallbackDataEnum.getFirstGradeTopics()) {
+            keyboard.add(getLineWithOneButton(topic, prefix + topic));
+        }
+
+        return InlineKeyboardMarkup.builder().keyboard(keyboard).build();
     }
 
     private List<InlineKeyboardButton> getLineWithOneButton(String buttonName, String callBackData) {

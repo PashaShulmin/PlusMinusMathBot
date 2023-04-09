@@ -17,8 +17,15 @@ public enum CallbackDataEnum {
     VARIANTS_NUMBER_PREFIX("variantsNumber"),
 
     // Форматы
+    FORMAT_PREFIX("format"),
     PDF("pdf"),
-    TEXT_MESSAGE("textMessage");
+    TEXT_MESSAGE("В тексте ответного сообщения"),
+
+    // 1-й класс темы
+    ADDITION_SUBTRACTION_1_9("Сложение и вычитание чисел от 1 до 9 (без перехода через разряд)"),
+    COMPARISON_1_9("Сравнение чисел от 1 до 9"),
+    ADDITION_SUBTRACTION_10_99("Сложение и вычитание чисел от 10 до 99 (без перехода через разряд)"),
+    COMPARISON_1_99("Сравнение чисел от 1 до 99");
 
     private final String buttonCallbackQuery;
 
@@ -37,6 +44,17 @@ public enum CallbackDataEnum {
         grades.add(CallbackDataEnum.SECOND_GRADE.buttonCallbackQuery);
         grades.add(CallbackDataEnum.THIRD_GRADE.buttonCallbackQuery);
         grades.add(CallbackDataEnum.FOURTH_GRADE.buttonCallbackQuery);
+
+        return grades;
+    }
+
+    public static List<String> getFirstGradeTopics() {
+        List<String> grades = new ArrayList<>();
+
+        grades.add(CallbackDataEnum.ADDITION_SUBTRACTION_1_9.buttonCallbackQuery);
+        grades.add(CallbackDataEnum.COMPARISON_1_9.buttonCallbackQuery);
+        grades.add(CallbackDataEnum.ADDITION_SUBTRACTION_10_99.buttonCallbackQuery);
+        grades.add(CallbackDataEnum.COMPARISON_1_99.buttonCallbackQuery);
 
         return grades;
     }

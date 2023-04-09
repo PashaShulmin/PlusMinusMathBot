@@ -23,11 +23,11 @@ public class CallbackQueryHandler {
         Long chatId = callbackQuery.getMessage().getChatId();
         Long userId = callbackQuery.getFrom().getId();
 
-        String prefix = callbackQuery.getData().split(";")[0];
+        String[] splitCallbackData = callbackQuery.getData().split(";");
+        String prefix = splitCallbackData[0];
         String arg = null;
-        if (prefix.equals(CallbackDataEnum.TASKS_NUMBER_PREFIX.getButtonCallbackQuery())
-                || prefix.equals(CallbackDataEnum.VARIANTS_NUMBER_PREFIX.getButtonCallbackQuery())) {
-            arg = callbackQuery.getData().split(";")[1];
+        if (splitCallbackData.length > 1) {
+            arg = splitCallbackData[1];
         }
         
         if (prefix.equals(CallbackDataEnum.TASKS_NUMBER_PREFIX.getButtonCallbackQuery())) {
@@ -36,12 +36,19 @@ public class CallbackQueryHandler {
         } else if (prefix.equals(CallbackDataEnum.VARIANTS_NUMBER_PREFIX.getButtonCallbackQuery())) {
             settingsRepo.setVariantsNumber(userId, Integer.parseInt(arg));
             return getTasksFormatChooseMessage(chatId);
-        } else {
-            settingsRepo.setTasksFormat(userId, prefix);
+        } else if (prefix.equals(CallbackDataEnum.FORMAT_PREFIX.getButtonCallbackQuery())) {
+            settingsRepo.setTasksFormat(userId, arg);
             String text = "Ваши настройки сохранены"
                     + "\n\n"
                     + settingsRepo.getWholeSettings(userId);
             return SendMessage.builder().chatId(chatId).text(text).parseMode("Markdown").build();
+        } else if (prefix.equals(CallbackDataEnum.FIRST_GRADE.getButtonCallbackQuery())) {
+            return getFirstGradeChooseTopicMessage(chatId);
+        } else {
+            return SendMessage.builder()
+                    .chatId(chatId)
+                    .text("Ещё не обработано")
+                    .build();
         }
     }
 
@@ -59,6 +66,15 @@ public class CallbackQueryHandler {
                 .chatId(chatId)
                 .text(BotMessageEnum.CHOOSE_TASKS_FORMAT_MESSAGE.GetMessage())
                 .replyMarkup(keyboardMaker.getTasksFormatKeyboard())
+                .parseMode("Markdown")
+                .build();
+    }
+
+    private BotApiMethod<?> getFirstGradeChooseTopicMessage(Long chatId) {
+        return SendMessage.builder()
+                .chatId(chatId)
+                .text(BotMessageEnum.CHOOSE_TOPIC_MESSAGE.GetMessage())
+                .replyMarkup(keyboardMaker.getFirstGradeTopicsKeyboard())
                 .parseMode("Markdown")
                 .build();
     }
