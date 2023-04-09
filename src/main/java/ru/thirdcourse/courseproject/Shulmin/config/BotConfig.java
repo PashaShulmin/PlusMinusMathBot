@@ -6,7 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import ru.thirdcourse.courseproject.Shulmin.telegram.MyMathTelegramBot;
+import ru.thirdcourse.courseproject.Shulmin.telegram.handlers.CallbackQueryHandler;
 import ru.thirdcourse.courseproject.Shulmin.telegram.handlers.MessageHandler;
+import ru.thirdcourse.courseproject.Shulmin.telegram.models.Settings;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -31,9 +37,14 @@ public class BotConfig {
     }
 
     @Bean
-    public MyMathTelegramBot myMathTelegramBot(MessageHandler messageHandler) {
+    public MyMathTelegramBot myMathTelegramBot(MessageHandler messageHandler, CallbackQueryHandler callbackQueryHandler) {
         SetWebhook setWebhook = SetWebhook.builder().url(webHookPath).build();
 
-        return new MyMathTelegramBot(setWebhook, botToken, botName, messageHandler);
+        return new MyMathTelegramBot(setWebhook, botToken, botName, messageHandler, callbackQueryHandler);
+    }
+
+    @Bean
+    public Map<Long, Settings> settingsMap() {
+        return new ConcurrentHashMap<>();
     }
 }

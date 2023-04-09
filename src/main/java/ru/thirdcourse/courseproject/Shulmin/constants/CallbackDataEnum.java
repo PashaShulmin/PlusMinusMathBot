@@ -8,25 +8,35 @@ public enum CallbackDataEnum {
     FIRST_GRADE("1 класс"),
     SECOND_GRADE("2 класс"),
     THIRD_GRADE("3 класс"),
-    FOURTH_GRADE("4 класс");
+    FOURTH_GRADE("4 класс"),
 
-    private final String buttonName;
+    // Префикс всех CallBackQuery.Data() у кнопок, отвечающих за выбор количества заданий
+    TASKS_NUMBER_PREFIX("tasksNumber"),
 
-    CallbackDataEnum(String buttonName) {
-        this.buttonName = buttonName;
+    // Префикс всех CallBackQuery.Data() у кнопок, отвечающих за выбор количества заданий
+    VARIANTS_NUMBER_PREFIX("variantsNumber"),
+
+    // Форматы
+    PDF("pdf"),
+    TEXT_MESSAGE("textMessage");
+
+    private final String buttonCallbackQuery;
+
+    CallbackDataEnum(String buttonCallbackQuery) {
+        this.buttonCallbackQuery = buttonCallbackQuery;
     }
 
-    public String getButtonName() {
-        return buttonName;
+    public String getButtonCallbackQuery() {
+        return buttonCallbackQuery;
     }
 
     public static List<String> getGrades() {
         List<String> grades = new ArrayList<>();
 
-        grades.add(CallbackDataEnum.FIRST_GRADE.buttonName);
-        grades.add(CallbackDataEnum.SECOND_GRADE.buttonName);
-        grades.add(CallbackDataEnum.THIRD_GRADE.buttonName);
-        grades.add(CallbackDataEnum.FOURTH_GRADE.buttonName);
+        grades.add(CallbackDataEnum.FIRST_GRADE.buttonCallbackQuery);
+        grades.add(CallbackDataEnum.SECOND_GRADE.buttonCallbackQuery);
+        grades.add(CallbackDataEnum.THIRD_GRADE.buttonCallbackQuery);
+        grades.add(CallbackDataEnum.FOURTH_GRADE.buttonCallbackQuery);
 
         return grades;
     }

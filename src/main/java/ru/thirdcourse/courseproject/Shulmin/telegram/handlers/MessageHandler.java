@@ -5,71 +5,91 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.thirdcourse.courseproject.Shulmin.constants.BotMessageEnum;
-import ru.thirdcourse.courseproject.Shulmin.constants.ButtonNameEnum;
+import ru.thirdcourse.courseproject.Shulmin.constants.MainMenuButtonsNameEnum;
+import ru.thirdcourse.courseproject.Shulmin.repository.UserSettingsRepository;
 import ru.thirdcourse.courseproject.Shulmin.telegram.keyboard.KeyboardMaker;
+import ru.thirdcourse.courseproject.Shulmin.telegram.models.Settings;
 
 @Component
 public class MessageHandler {
     private final KeyboardMaker keyboardMaker;
+    private UserSettingsRepository settingsRepo;
 
-    public MessageHandler(KeyboardMaker keyboardMaker) {
+    public MessageHandler(KeyboardMaker keyboardMaker, UserSettingsRepository repository) {
         this.keyboardMaker = keyboardMaker;
+        this.settingsRepo = repository;
     }
 
     public BotApiMethod<?> answerMessage(Message message) {
         Long chatId = message.getChatId();
+        Long userId = message.getFrom().getId();
 
         String messageText = message.getText();
 
         if (messageText.equals("/start")) {
-            return GetStartMessage(chatId);
-        } else if (messageText.equals(ButtonNameEnum.GENERATE_EXERCISES_BUTTON.GetButtonName())) {
-            return GetGenerateExercisesMessage(chatId);
-        } else if (messageText.equals(ButtonNameEnum.SETTINGS_BUTTON.GetButtonName())) {
-            return GetSettingsMessage(chatId);
-        } else if (messageText.equals(ButtonNameEnum.HELP_BUTTON.GetButtonName())) {
-            return GetHelpMessage(chatId);
+            setDefaultSettings(userId);
+            return getStartMessage(chatId);
+        } else if (messageText.equals(MainMenuButtonsNameEnum.GENERATE_EXERCISES_BUTTON.GetButtonName())) {
+            return getGenerateExercisesMessage(chatId);
+        } else if (messageText.equals(MainMenuButtonsNameEnum.SETTINGS_BUTTON.GetButtonName())) {
+            return getSettingsMessage(chatId, userId);
+        } else if (messageText.equals(MainMenuButtonsNameEnum.HELP_BUTTON.GetButtonName())) {
+            return getHelpMessage(chatId);
         } else {
             return SendMessage.builder().chatId(chatId).text(BotMessageEnum.NON_COMMAND_MESSAGE.GetMessage()).build();
         }
     }
 
-    private BotApiMethod<?> GetStartMessage(Long chatId) {
-        SendMessage sendMessage = SendMessage.builder()
+    private void setDefaultSettings(Long userId) {
+        Settings settings = new Settings();
+        settingsRepo.setWholeSettings(userId, settings);
+    }
+
+    private BotApiMethod<?> getStartMessage(Long chatId) {
+        return SendMessage.builder()
                 .chatId(chatId)
                 .text(BotMessageEnum.HELP_MESSAGE.GetMessage())
                 .replyMarkup(keyboardMaker.getMainMenuKeyboard())
+                .parseMode("Markdown")
                 .build();
-        sendMessage.enableMarkdown(true);
-        return sendMessage;
     }
 
-    private BotApiMethod<?> GetGenerateExercisesMessage(Long chatId) {
-        SendMessage sendMessage = SendMessage.builder()
+    private BotApiMethod<?> getGenerateExercisesMessage(Long chatId) {
+        return SendMessage.builder()
                 .chatId(chatId)
                 .text(BotMessageEnum.GENERATE_EXERCISES_MESSAGE.GetMessage())
                 .replyMarkup(keyboardMaker.getSchoolGradesKeyboard())
+                .parseMode("Markdown")
                 .build();
-        sendMessage.enableMarkdown(true);
-        return sendMessage;
     }
 
-    private BotApiMethod<?> GetSettingsMessage(Long chatId) {
-        SendMessage sendMessage = SendMessage.builder()
+    private BotApiMethod<?> getSettingsMessage(Long chatId, Long userId) {
+        Settings settings = settingsRepo.getWholeSettings(userId);
+        if (settings == null) {
+            return SendMessage.builder()
+                    .chatId(chatId)
+                    .text(BotMessageEnum.UPDATE_BOT_MESSAGE.GetMessage())
+                    .build();
+        }
+        String text = BotMessageEnum.SETTINGS_MESSAGE.GetMessage()
+                + "\n\n"
+                + settings.toString()
+                + "\n"
+                + BotMessageEnum.CHOOSE_TASKS_NUMBER_MESSAGE.GetMessage();
+
+        return SendMessage.builder()
                 .chatId(chatId)
-                .text(BotMessageEnum.SETTINGS_MESSAGE.GetMessage() + "\n\n" + BotMessageEnum.CHOOSE_TASKS_NUMBER_MESSAGE.GetMessage())
-                .replyMarkup(keyboardMaker.getTasksNumberMarkup())
+                .text(text)
+                .replyMarkup(keyboardMaker.getTasksNumberKeyboard())
+                .parseMode("Markdown")
                 .build();
-        sendMessage.enableMarkdown(true);
-        return sendMessage;
     }
 
-    private BotApiMethod<?> GetHelpMessage(Long chatId) {
-        SendMessage sendMessage = SendMessage.builder()
+    private BotApiMethod<?> getHelpMessage(Long chatId) {
+        return SendMessage.builder()
                 .chatId(chatId)
                 .text(BotMessageEnum.HELP_MESSAGE.GetMessage())
+                .parseMode("Markdown")
                 .build();
-        sendMessage.enableMarkdown(true);
-        return sendMessage;
     }
 }
