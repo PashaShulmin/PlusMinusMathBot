@@ -8,9 +8,8 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import ru.thirdcourse.courseproject.Shulmin.telegram.MyMathTelegramBot;
 import ru.thirdcourse.courseproject.Shulmin.telegram.handlers.CallbackQueryHandler;
 import ru.thirdcourse.courseproject.Shulmin.telegram.handlers.MessageHandler;
-import ru.thirdcourse.courseproject.Shulmin.telegram.models.Settings;
+import ru.thirdcourse.courseproject.Shulmin.telegram.entity.Settings;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

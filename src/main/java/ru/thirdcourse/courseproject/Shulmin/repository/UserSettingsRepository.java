@@ -1,12 +1,9 @@
 package ru.thirdcourse.courseproject.Shulmin.repository;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
-import ru.thirdcourse.courseproject.Shulmin.telegram.MyMathTelegramBot;
-import ru.thirdcourse.courseproject.Shulmin.telegram.models.Settings;
+import ru.thirdcourse.courseproject.Shulmin.telegram.entity.Settings;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class UserSettingsRepository {

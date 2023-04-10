@@ -1,4 +1,4 @@
-package ru.thirdcourse.courseproject.Shulmin.telegram.models;
+package ru.thirdcourse.courseproject.Shulmin.telegram.entity;
 
 import java.util.Objects;
 
@@ -7,16 +7,10 @@ public final class Settings {
     private int variantsNumber;
     private String tasksFormat;
 
-    public Settings(int tasksNumber, int variantsNumber, String tasksFormat) {
-        this.tasksNumber = tasksNumber;
-        this.variantsNumber = variantsNumber;
-        this.tasksFormat = tasksFormat;
-    }
-
     public Settings() {
         tasksNumber = 10;
         variantsNumber = 1;
-        tasksFormat = "pdf";
+        tasksFormat = "textMessage";
     }
 
     public int getTasksNumber() {

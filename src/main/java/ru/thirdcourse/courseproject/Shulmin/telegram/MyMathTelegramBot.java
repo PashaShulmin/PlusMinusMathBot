@@ -1,21 +1,16 @@
 package ru.thirdcourse.courseproject.Shulmin.telegram;
 
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 import ru.thirdcourse.courseproject.Shulmin.telegram.handlers.CallbackQueryHandler;
 import ru.thirdcourse.courseproject.Shulmin.telegram.handlers.MessageHandler;
-import ru.thirdcourse.courseproject.Shulmin.telegram.models.Settings;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class MyMathTelegramBot extends SpringWebhookBot {
     private String botPath;
-    private String botUsername;
+    private final String botUsername;
     private String botToken;
 
     private final MessageHandler messageHandler;
