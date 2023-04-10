@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ru.thirdcourse.courseproject.Shulmin.constants.MainMenuButtonsNameEnum;
-import ru.thirdcourse.courseproject.Shulmin.constants.CallbackDataEnum;
+import ru.thirdcourse.courseproject.Shulmin.constants.InlineKeyboardsDataEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,31 +36,31 @@ public class KeyboardMaker {
     }
 
     public InlineKeyboardMarkup getSchoolGradesKeyboard() {
+        final String prefix = InlineKeyboardsDataEnum.GRADES_PREFIX.getContent() + ";";
+
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
-        for (String buttonName : CallbackDataEnum.getGrades()) {
-            keyboard.add(getLineWithOneButton(buttonName, buttonName));
+        for (InlineKeyboardsDataEnum button : InlineKeyboardsDataEnum.getGrades()) {
+            keyboard.add(getLineWithOneButton(button.getContent(), prefix + button.getButtonCallbackQuery()));
         }
 
         return InlineKeyboardMarkup.builder().keyboard(keyboard).build();
     }
 
     public InlineKeyboardMarkup getTasksNumberKeyboard() {
-        final String prefix = CallbackDataEnum.TASKS_NUMBER_PREFIX.getButtonCallbackQuery() + ";";
+        final String prefix = InlineKeyboardsDataEnum.TASKS_NUMBER_PREFIX.getContent() + ";";
 
         String[] tasksNumberVariants = new String[] {
                 "1", "2", "3", "4", "5",
                 "6", "7", "8", "9", "10",
-                "15", "20", "25", "30", "35",
-                "40", "45", "50", "60", "70",
-                "80", "90", "100"
+                "15", "20", "25", "30"
         };
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
         int row = -1;
         for (int i = 0; i < tasksNumberVariants.length; i++) {
-            if (i == 0 || i == 5 || i == 10 || i == 14 || i == 18 || i == 21) {
+            if (i == 0 || i == 5 || i == 10) {
                 row++;
                 keyboard.add(new ArrayList<>());
             }
@@ -76,12 +76,12 @@ public class KeyboardMaker {
     }
 
     public InlineKeyboardMarkup getVariantsNumberKeyboard() {
-        final String prefix = CallbackDataEnum.VARIANTS_NUMBER_PREFIX.getButtonCallbackQuery() + ";";
+        final String prefix = InlineKeyboardsDataEnum.VARIANTS_NUMBER_PREFIX.getContent() + ";";
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(new ArrayList<>());
 
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 3; i++) {
             String variantsNumber = Integer.toString(i);
             InlineKeyboardButton inlineKeyboardButton = InlineKeyboardButton.builder()
                     .text(variantsNumber)
@@ -93,24 +93,36 @@ public class KeyboardMaker {
     }
 
     public ReplyKeyboard getTasksFormatKeyboard() {
-        final String prefix = CallbackDataEnum.FORMAT_PREFIX.getButtonCallbackQuery() + ";";
+        final String prefix = InlineKeyboardsDataEnum.FORMAT_PREFIX.getContent() + ";";
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(getLineWithOneButton(CallbackDataEnum.PDF.getButtonCallbackQuery(),
-                prefix + CallbackDataEnum.PDF.getButtonCallbackQuery()));
-        keyboard.add(getLineWithOneButton(CallbackDataEnum.TEXT_MESSAGE.getButtonCallbackQuery(),
-                prefix + CallbackDataEnum.TEXT_MESSAGE.getButtonCallbackQuery()));
+        keyboard.add(getLineWithOneButton(InlineKeyboardsDataEnum.PDF.getButtonCallbackQuery(),
+                prefix + InlineKeyboardsDataEnum.PDF.getButtonCallbackQuery()));
+        keyboard.add(getLineWithOneButton(InlineKeyboardsDataEnum.TEXT_MESSAGE.getButtonCallbackQuery(),
+                prefix + InlineKeyboardsDataEnum.TEXT_MESSAGE.getButtonCallbackQuery()));
 
         return InlineKeyboardMarkup.builder().keyboard(keyboard).build();
     }
 
     public ReplyKeyboard getFirstGradeTopicsKeyboard() {
-        final String prefix = CallbackDataEnum.FIRST_GRADE.getButtonCallbackQuery() + ";";
+        final String prefix = InlineKeyboardsDataEnum.FIRST_GRADE.getContent() + ";";
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
-        for (String topic : CallbackDataEnum.getFirstGradeTopics()) {
-            keyboard.add(getLineWithOneButton(topic, prefix + topic));
+        for (InlineKeyboardsDataEnum buttonData : InlineKeyboardsDataEnum.getFirstGradeTopics()) {
+            keyboard.add(getLineWithOneButton(buttonData.getContent(), prefix + buttonData.getButtonCallbackQuery()));
+        }
+
+        return InlineKeyboardMarkup.builder().keyboard(keyboard).build();
+    }
+
+    public ReplyKeyboard getSecondGradeTopicsKeyboard() {
+        final String prefix = InlineKeyboardsDataEnum.SECOND_GRADE.getContent() + ";";
+
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+
+        for (InlineKeyboardsDataEnum buttonData : InlineKeyboardsDataEnum.getSecondGradeTopics()) {
+            keyboard.add(getLineWithOneButton(buttonData.getContent(), prefix + buttonData.getButtonCallbackQuery()));
         }
 
         return InlineKeyboardMarkup.builder().keyboard(keyboard).build();
