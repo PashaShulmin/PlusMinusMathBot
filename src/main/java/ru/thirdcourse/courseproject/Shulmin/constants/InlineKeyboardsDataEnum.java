@@ -25,7 +25,7 @@ public enum InlineKeyboardsDataEnum {
 
     // Форматы
     FORMAT_PREFIX("format"),
-    PDF("pdf"),
+    DOCX(".docx (Word документ)"),
     TEXT_MESSAGE("В тексте ответного сообщения"),
 
     // 1-й класс темы текст на кнопках
@@ -50,8 +50,20 @@ public enum InlineKeyboardsDataEnum {
     ADDITION_SUBTRACTION_1_100("2.1"),
     EQUATION_PLUS_MINUS_100("2.2"),
     MULTIPLICATION_TABLE_5("2.3"),
-    DIVISION_TABLE_5("2.4");
+    DIVISION_TABLE_5("2.4"),
 
+    // 3-й класс темы текст на кнопках
+    MULTIPLICATION_TABLE_FULL_TEXT("Таблица умножения полностью"),
+    DIVISION_TABLE_FULL_TEXT("Деление по всей таблице умножения"),
+    EQUATION_MULTIPLICATION_TABLE_TEXT("Уравнения по всей таблице умножения"),
+    DIVISION_WITH_REMAINDER_TEXT("Деление с остатком по всей таблице умножения"),
+    ADDITION_SUBTRACTION_BIG_NUMBERS_TEXT("Сложение / вычитание многозначный чисел"),
+    // 3-й класс темы
+    MULTIPLICATION_TABLE_FULL("3.1"),
+    DIVISION_TABLE_FULL("3.2"),
+    EQUATION_MULTIPLICATION_TABLE("3.3"),
+    DIVISION_WITH_REMAINDER("3.4"),
+    ADDITION_SUBTRACTION_BIG_NUMBERS("3.5");
 
     private final String content;
 
@@ -100,6 +112,18 @@ public enum InlineKeyboardsDataEnum {
         buttons.add(InlineKeyboardsDataEnum.EQUATION_PLUS_MINUS_100_TEXT);
         buttons.add(InlineKeyboardsDataEnum.MULTIPLICATION_TABLE_5_TEXT);
         buttons.add(InlineKeyboardsDataEnum.DIVISION_TABLE_5_TEXT);
+
+        return buttons;
+    }
+
+    public static List<InlineKeyboardsDataEnum> getThirdGradeTopics() {
+        List<InlineKeyboardsDataEnum> buttons = new ArrayList<>();
+
+        buttons.add(InlineKeyboardsDataEnum.MULTIPLICATION_TABLE_FULL_TEXT);
+        buttons.add(InlineKeyboardsDataEnum.DIVISION_TABLE_FULL_TEXT);
+        buttons.add(InlineKeyboardsDataEnum.EQUATION_MULTIPLICATION_TABLE_TEXT);
+        buttons.add(InlineKeyboardsDataEnum.DIVISION_WITH_REMAINDER_TEXT);
+        buttons.add(InlineKeyboardsDataEnum.ADDITION_SUBTRACTION_BIG_NUMBERS_TEXT);
 
         return buttons;
     }

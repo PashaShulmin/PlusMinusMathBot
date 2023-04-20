@@ -25,12 +25,14 @@ public class SecondGradeGeneratorImpl implements SecondGradeGenerator {
     }
 
     @Override
-    public FileInputStream GenerateDocx(String type, Long userId) {
-        return null;
+    public String GenerateString(String type, Long userId) {
+        List<List<String>> tasks = GenerateTasksAndAnswersAsListsOfStrings(type, userId);
+
+        return StringUtil.constructString(tasks);
     }
 
     @Override
-    public String GenerateString(String type, Long userId) {
+    public List<List<String>> GenerateTasksAndAnswersAsListsOfStrings(String type, Long userId) {
         int tasksNumber = settingsRepo.getTasksNumber(userId);
         int variantsNumber = settingsRepo.getVariantsNumber(userId);
 
@@ -46,7 +48,7 @@ public class SecondGradeGeneratorImpl implements SecondGradeGenerator {
             tasks = GenerateDivisionTable5(tasksNumber, variantsNumber);
         }
 
-        return StringUtil.constructString(tasks);
+        return tasks;
     }
 
     private List<List<String>> GenerateAdditionSubtraction1100(int tasksNumber, int variantsNumber) {

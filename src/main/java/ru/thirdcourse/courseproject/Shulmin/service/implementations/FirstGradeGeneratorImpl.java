@@ -1,13 +1,21 @@
 package ru.thirdcourse.courseproject.Shulmin.service.implementations;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xwpf.usermodel.BreakType;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.springframework.stereotype.Service;
+import ru.thirdcourse.courseproject.Shulmin.GenerateDocxTest;
+import ru.thirdcourse.courseproject.Shulmin.PlusMinusMathBotApplication;
 import ru.thirdcourse.courseproject.Shulmin.constants.InlineKeyboardsDataEnum;
 import ru.thirdcourse.courseproject.Shulmin.repository.UserSettingsRepository;
 import ru.thirdcourse.courseproject.Shulmin.service.FirstGradeGenerator;
 import ru.thirdcourse.courseproject.Shulmin.utils.StringUtil;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Random;
 import java.util.List;
@@ -26,40 +34,31 @@ public class FirstGradeGeneratorImpl implements FirstGradeGenerator {
         random = new Random(date.getTime());
     }
 
-    public FileInputStream GenerateDocx(String type, Long userId) {
-        /*Document doc = new Document();
-        try {
-            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("Tasks.pdf"));
-            log.info("pdf created");
-            doc.open();
-            doc.add(new Paragraph(GenerateString(type, userId)));
-            doc.close();
-            writer.close();
-        } catch (DocumentException ex) {
-            ex.printStackTrace();
-        }
-        return new FileInputStream("Tasks.pdf");*/
-        return null;
+    @Override
+    public String GenerateString(String type, Long userId) {
+        List<List<String>> tasksAndAnswers = GenerateTasksAndAnswersAsListsOfStrings(type, userId);
+
+        return StringUtil.constructString(tasksAndAnswers);
     }
 
     @Override
-    public String GenerateString(String type, Long userId) {
+    public List<List<String>> GenerateTasksAndAnswersAsListsOfStrings(String type, Long userId) {
         int tasksNumber = settingsRepo.getTasksNumber(userId);
         int variantsNumber = settingsRepo.getVariantsNumber(userId);
 
-        List<List<String>> tasks;
+        List<List<String>> tasksAndAnswers;
 
         if (type.equals(InlineKeyboardsDataEnum.ADDITION_SUBTRACTION_1_9.getContent())) {
-            tasks = GenerateAdditionSubtraction19(tasksNumber, variantsNumber);
+            tasksAndAnswers = GenerateAdditionSubtraction19(tasksNumber, variantsNumber);
         } else if (type.equals(InlineKeyboardsDataEnum.COMPARISON_1_9.getContent())) {
-            tasks = GenerateComparison19(tasksNumber, variantsNumber);
+            tasksAndAnswers = GenerateComparison19(tasksNumber, variantsNumber);
         } else if (type.equals(InlineKeyboardsDataEnum.ADDITION_SUBTRACTION_10_99.getContent())) {
-            tasks = GenerateAdditionSubtraction1099(tasksNumber, variantsNumber);
+            tasksAndAnswers = GenerateAdditionSubtraction1099(tasksNumber, variantsNumber);
         } else {
-            tasks = GenerateComparison199(tasksNumber, variantsNumber);
+            tasksAndAnswers = GenerateComparison199(tasksNumber, variantsNumber);
         }
 
-        return StringUtil.constructString(tasks);
+        return tasksAndAnswers;
     }
 
     private List<List<String>> GenerateAdditionSubtraction19(int tasksNumber, int variantsNumber) {
